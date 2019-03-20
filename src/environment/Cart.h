@@ -41,9 +41,7 @@ namespace Route13Plan
     class Cart {
     public:
 
-        static CartId nextId;
-
-        Cart(LocationId lastKnownLocation, int32_t capacity, int32_t payload = 0);
+        Cart(int32_t id, LocationId lastKnownLocation, int32_t capacity, int32_t payload = 0);
         Cart() = delete;
 
         CartId id;

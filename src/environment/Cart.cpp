@@ -31,10 +31,8 @@
 namespace Route13Plan
 {
 
-    CartId Cart::nextId = 0;
-
-    Cart::Cart(LocationId lastloc, int32_t cap, int32_t pay) :
-        id(nextId++),
+    Cart::Cart(int32_t ident, LocationId lastloc, int32_t cap, int32_t pay) :
+        id(ident),
         lastKnownLocation(lastloc),
         capacity(cap),
         payload(pay)

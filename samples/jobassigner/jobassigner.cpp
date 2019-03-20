@@ -29,28 +29,12 @@
 
 using namespace Route13Plan;
 
-// The loadTimeEstimator models the time to load items onto a cart. Loading an
-// item takes 5 units of time. 
-SimTime loadTimeEstimator(LocationId location, uint32_t quantity, SimTime startTime)
-{
-    (void)location;
-    (void)startTime;
-    return 5 * quantity;
-}
-
-// The unloadTimeEstimator models the time to unload items from a cart.
-// Unloading an item takes 2 units of time. 
-SimTime unloadTimeEstimator(LocationId location, int32_t quantity, SimTime startTime)
-{
-    (void)location;
-    (void)startTime;
-    return 2 * quantity;
-}
-
 #define LOCATION_COUNT 11           // Number of locations in a LinearLocations
 #define LOCATION_DISTANCE 100       // Distance between each location in SimTime
 #define CART_COUNT 10
 #define CART_CAPACITY 10
+#define LOAD_SPEED 5
+#define UNLOAD_SPEED 2
 
 int main() {
     auto jobCount = 50;
@@ -63,7 +47,7 @@ int main() {
     auto locations = LinearLocations(LOCATION_COUNT, LOCATION_DISTANCE);
 
     // Create a fleet of some randomly-located carts
-    auto carts = Carts();
+    auto carts = Carts(LOAD_SPEED, UNLOAD_SPEED);
     carts.createRandom(CART_COUNT, CART_CAPACITY, locations.getCount());
     carts.print(std::cout);
 
@@ -80,8 +64,8 @@ int main() {
         // End time is based on minimum job duration plus random slack.
         auto minDuration =
             locations.transitTimeEstimator(startLoc, endLoc) +
-            loadTimeEstimator(startLoc, quantity, startTime) +
-            unloadTimeEstimator(endLoc, quantity, startTime);
+            carts.loadTimeEstimator(quantity) +
+            carts.unloadTimeEstimator(quantity);
         auto endTime = startTime + minDuration * (1 + rand() % slack);
 
         auto job = new TransferJob(quantity, startLoc, startTime, endLoc, endTime);

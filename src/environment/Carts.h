@@ -39,6 +39,10 @@ namespace Route13Plan
     // A fleet of carts used to transport packages
     class Carts {
     public:
+        Carts(int32_t loadSpeed, int32_t unloadSpeed);
+
+        // Add a cart to the fleet of carts
+        void addCart(Cart *);
 
         // Create a fleet of carts of fixed capacity at random locations
         void createRandom(int32_t cartCount, int32_t capacity, int32_t locCount);
@@ -49,7 +53,17 @@ namespace Route13Plan
         // Output to stream information about the fleet
         void print(std::ostream& out);
 
-        std::vector<Cart> carts;
+        // The loadTimeEstimator models the time to load items onto a cart.
+        SimTime loadTimeEstimator(uint32_t quantity);
+
+        // The unloadTimeEstimator models the time to unload items from a cart.
+        SimTime unloadTimeEstimator(int32_t quantity);
+
+        std::vector<std::unique_ptr<Cart>> carts;
+
+    private:
+        int32_t m_loadSpeed;
+        int32_t m_unloadSpeed;
 
     };
 

@@ -31,12 +31,23 @@
 namespace Route13Plan
 {
 
+    Carts::Carts(int32_t loadSpeed, int32_t unloadSpeed) :
+        m_loadSpeed(loadSpeed),
+        m_unloadSpeed(unloadSpeed)
+    {
+    }
+
+    // Add a cart to the fleet of carts
+    void Carts::addCart(Cart* cart)
+    {
+        carts.push_back(std::unique_ptr<Cart>(cart));
+    }
+
     // Create a random fleet of carts
     void Carts::createRandom(int32_t cartCount, int32_t capacity, int32_t locCount) {
         for (int32_t i = 0; i < cartCount; ++i)
         {
-            Cart cart(rand() % locCount, capacity, 0);
-            carts.push_back(cart);
+            carts.push_back(std::unique_ptr<Cart>(new Cart(i, rand() % locCount, capacity, 0)));
         }
     }
 
@@ -50,12 +61,26 @@ namespace Route13Plan
     void Carts::print(std::ostream& out)
     {
         out << "We have " << carts.size() << " carts:" << std::endl;
-        for (Cart &cart : carts)
+        for (auto carti = carts.begin(); carti != carts.end(); ++carti)
         {
-            out << "     Cart " << cart.id << " at location " << cart.lastKnownLocation
-                << " with capacity " << cart.capacity << "." << std::endl;
+            auto &cart = *carti;
+            out << "     Cart " << cart->id << " at location " << cart->lastKnownLocation
+                << " with capacity " << cart->capacity << "." << std::endl;
         }
         out << std::endl;
     }
+
+    // The loadTimeEstimator models the time to load items onto a cart.
+    SimTime Carts::loadTimeEstimator(uint32_t quantity)
+    {
+        return m_loadSpeed * quantity;
+    }
+
+    // The unloadTimeEstimator models the time to unload items from a cart.
+    SimTime Carts::unloadTimeEstimator(int32_t quantity)
+    {
+        return m_unloadSpeed * quantity;
+    }
+
 
 }
