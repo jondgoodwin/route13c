@@ -43,7 +43,7 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 set(ENVIRONMENT_HFILES
   ${CMAKE_SOURCE_DIR}/src/environment/Cart.h
-  ${CMAKE_SOURCE_DIR}/src/environment/Location.h
+  ${CMAKE_SOURCE_DIR}/src/environment/ILocations.h
 )
 
 set(PUBLIC_HFILES

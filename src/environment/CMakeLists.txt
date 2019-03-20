@@ -3,12 +3,14 @@
 set(CPPFILES
     Cart.cpp
 	Job.cpp
+	LinearLocations.cpp
 )
 
 set(PRIVATE_HFILES
     Cart.h
+	ILocations.h
 	Job.h
-	Location.h
+	LinearLocations.h
 )
 
 add_library(Environment ${CPPFILES} ${PRIVATE_HFILES} ${PUBLIC_HFILES})

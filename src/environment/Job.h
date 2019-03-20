@@ -8,9 +8,8 @@
 
 #include <cstdint>
 
-#include "Location.h"
+#include "ILocations.h"
 #include "Cart.h"
-typedef uint32_t SimTime;
 
 typedef uint32_t JobId;
 
