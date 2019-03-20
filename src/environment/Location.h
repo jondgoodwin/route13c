@@ -8,4 +8,4 @@
 
 #pragma once
 
-typedef uint32_t LocationId;
+typedef int32_t LocationId;

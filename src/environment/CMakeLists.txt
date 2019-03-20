@@ -2,10 +2,12 @@
 
 set(CPPFILES
     Cart.cpp
+	Job.cpp
 )
 
 set(PRIVATE_HFILES
     Cart.h
+	Job.h
 	Location.h
 )
 

@@ -16,16 +16,18 @@ typedef uint32_t CartId;
 class Cart {
 public:
 
-    Cart(CartId id, LocationId lastKnownLocation, uint32_t capacity, uint32_t payload = 0);
+    static CartId nextId;
+
+    Cart(LocationId lastKnownLocation, int32_t capacity, int32_t payload = 0);
     Cart() = delete;
 
     CartId id;
 
     // Cart capacity. Could be number of boxes/containers, tons, gallons, etc.
-    uint32_t capacity;
+    int32_t capacity;
 
     // Amount of capacity currently in use.
-    uint32_t payload;
+    int32_t payload;
 
     // Last known location of the cart.
     LocationId lastKnownLocation;

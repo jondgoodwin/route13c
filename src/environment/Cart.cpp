@@ -6,8 +6,10 @@
 
 #include "Cart.h"
 
-Cart::Cart(CartId cartId, LocationId lastloc, uint32_t cap, uint32_t pay) :
-    id(cartId),
+CartId Cart::nextId = 0;
+
+Cart::Cart(LocationId lastloc, int32_t cap, int32_t pay) :
+    id(nextId++),
     lastKnownLocation(lastloc),
     capacity(cap),
     payload(pay)
