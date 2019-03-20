@@ -25,7 +25,7 @@
 #include <vector>
 #include "../../src/environment/LinearLocations.h"
 #include "../../src/environment/Carts.h"
-#include "../../src/environment/Job.h"
+#include "../../src/environment/Jobs.h"
 
 using namespace Route13Plan;
 
@@ -35,13 +35,11 @@ using namespace Route13Plan;
 #define CART_CAPACITY 10
 #define LOAD_SPEED 5
 #define UNLOAD_SPEED 2
+#define JOB_COUNT 50
+#define MAX_START_TIME 1000
+#define SLACK 100
 
 int main() {
-    auto jobCount = 50;
-    auto maxStartTime = 1000;
-    auto slack = 100;    // Was 2
-    //auto maxLookahead = 3;
-    //auto startTime = 0;
 
     // Define the location graph
     auto locations = LinearLocations(LOCATION_COUNT, LOCATION_DISTANCE);
@@ -52,29 +50,8 @@ int main() {
     carts.print(std::cout);
 
     // Create a set of random jobs.
-    std::cout << "Creating " << jobCount << " transfer jobs." << std::endl;
-    std::vector<IJob*> jobs;
-    for (int32_t i = 0; i < jobCount; ++i) {
-        auto startLoc = rand() % locations.getCount();
-        auto delta = rand() % (locations.getCount() - 2) + 1;  // non-zero distance to end
-        auto endLoc = (startLoc + delta) % locations.getCount();  // different than startLoc
-        auto quantity = rand() % (CART_CAPACITY - 1) + 1;   // non-zero
-        auto startTime = rand() % maxStartTime;
-
-        // End time is based on minimum job duration plus random slack.
-        auto minDuration =
-            locations.transitTimeEstimator(startLoc, endLoc) +
-            carts.loadTimeEstimator(quantity) +
-            carts.unloadTimeEstimator(quantity);
-        auto endTime = startTime + minDuration * (1 + rand() % slack);
-
-        auto job = new TransferJob(quantity, startLoc, startTime, endLoc, endTime);
-        jobs.push_back((IJob*)job);
-        std::cout << "    Job " << job->id << " move " << job->quantity
-            << " items from " << job->pickupLocation << " to " << job->dropoffLocation
-            << " between " << job->pickupAfter << " and " << job->dropoffBefore << std::endl;
-
-    }
-    std::cout << std::endl;
+    auto jobs = Jobs();
+    jobs.createRandom(JOB_COUNT, &locations, &carts, CART_CAPACITY, MAX_START_TIME, SLACK);
+    jobs.print(std::cout);
 
 }

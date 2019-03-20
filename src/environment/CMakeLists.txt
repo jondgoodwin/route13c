@@ -4,6 +4,7 @@ set(CPPFILES
     Cart.cpp
 	Carts.cpp
 	Job.cpp
+	Jobs.cpp
 	LinearLocations.cpp
 )
 
@@ -12,6 +13,7 @@ set(PRIVATE_HFILES
 	Carts.h
 	ILocations.h
 	Job.h
+	Jobs.h
 	LinearLocations.h
 )
 

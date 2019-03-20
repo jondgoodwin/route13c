@@ -46,6 +46,7 @@ set(ENVIRONMENT_HFILES
   ${CMAKE_SOURCE_DIR}/src/environment/Carts.h
   ${CMAKE_SOURCE_DIR}/src/environment/ILocations.h
   ${CMAKE_SOURCE_DIR}/src/environment/Job.h
+  ${CMAKE_SOURCE_DIR}/src/environment/Jobs.h
   ${CMAKE_SOURCE_DIR}/src/environment/LinearLocations.h
 )
 
