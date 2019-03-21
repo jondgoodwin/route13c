@@ -55,7 +55,7 @@ namespace Route13Plan
     OutOfServiceJob::OutOfServiceJob(LocationId suspendLoc,
         SimTime suspendTime,
         SimTime resumeTime) :
-        IJob(IJob::TRANSFER),
+        IJob(IJob::OUT_OF_SERVICE),
         state(OutOfServiceJob::BEFORE_BREAK),
         suspendLocation(suspendLoc),
         suspendTime(suspendTime),

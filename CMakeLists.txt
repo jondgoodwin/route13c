@@ -70,6 +70,7 @@ include_directories(
 #
 add_subdirectory(src)
 add_subdirectory(samples/jobassigner)
+add_subdirectory(samples/routeplanner)
 
 add_custom_target(TOPLEVEL SOURCES
   LICENSE.txt
