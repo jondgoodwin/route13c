@@ -26,6 +26,7 @@
 #include "../../src/environment/LinearLocations.h"
 #include "../../src/environment/Carts.h"
 #include "../../src/environment/Jobs.h"
+#include "../../src/planner/RoutePlanner.h"
 
 using namespace Route13Plan;
 
@@ -52,4 +53,6 @@ int main() {
     jobs.addOutOfService(9, 30 * 60, 40 * 60);
     jobs.print(std::cout);
 
+    auto planner = new RoutePlanner(&locations, &carts, &jobs);
+    planner->explainRoute();
 }

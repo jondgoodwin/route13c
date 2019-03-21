@@ -8,7 +8,7 @@ set(PRIVATE_HFILES
 )
 
 add_executable(jobassigner jobassigner.cpp)
-target_link_libraries(jobassigner Environment)
+target_link_libraries(jobassigner Environment Planner)
 set_property(TARGET jobassigner PROPERTY FOLDER "samples/jobassigner")
 set_property(TARGET jobassigner PROPERTY PROJECT_LABEL "Executable")
 

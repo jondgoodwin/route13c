@@ -8,7 +8,7 @@ set(PRIVATE_HFILES
 )
 
 add_executable(routeplanner routeplanner.cpp)
-target_link_libraries(routeplanner Environment)
+target_link_libraries(routeplanner Environment Planner)
 set_property(TARGET routeplanner PROPERTY FOLDER "samples/routeplanner")
 set_property(TARGET routeplanner PROPERTY PROJECT_LABEL "Executable")
 
