@@ -22,29 +22,55 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-// RoutePlanner
+// Action
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "RoutePlanner.h"
+#pragma once
+
+#include <cstdint>
+
+#include "../environment/Job.h"
 
 namespace Route13Plan
 {
 
-    RoutePlanner::RoutePlanner(ILocations* locations, Carts* carts, Jobs* jobs) :
-        m_locations(locations),
-        m_carts(carts),
-        m_jobs(jobs)
-    {
-    }
+    enum ActionType {
+        PICKUP,
+        DROPOFF,
+        SUSPEND
+    };
 
-    Route* RoutePlanner::getBestRoute()
-    {
-        return NULL;
-    }
+    // Actions are the smallest unit of work. Jobs and Plans consist of ordered
+    // sequences of Actions.
+    class IAction {
+    public:
+        IJob* job;
+        ActionType type;
+    };
 
-    void RoutePlanner::explainRoute()
-    {
+    // PickupAction loads a cart with a quantity of items, at a certain location,
+    // after a time when the items become available.
+    class PickupAction : IAction {
+        LocationId location;
+        SimTime time;
+        int32_t quantity;
+    };
 
-    }
+    // DropoffAction unloads a quantity of items from a cart, at a certain location,
+    // before a certain time.
+    class DropoffAction : IAction {
+        LocationId location;
+        SimTime time;
+        int32_t quantity;
+    };
+
+    // SuspendAction takes a cart out of service, at a certain location, within a
+    // window of time.
+    class SuspendAction : IAction {
+        LocationId location;
+        SimTime suspendTime;
+        SimTime resumeTime;
+    };
+
 }

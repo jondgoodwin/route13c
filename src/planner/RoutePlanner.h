@@ -31,6 +31,7 @@
 #include <cstdint>
 
 #include "../environment/Jobs.h"
+#include "../planner/Route.h"
 
 namespace Route13Plan
 {
@@ -45,6 +46,33 @@ namespace Route13Plan
     public:
 
         RoutePlanner(ILocations* locations, Carts* carts, Jobs* jobs);
+
+        // Finds the shortest duration Route for a set of jobs, while satisfying
+        // the following constraints:
+        //    1. The first Action associated with each Job must appear before its
+        //       corresponding second Action.
+        //    2. The cart capacity is never exceeded.
+        //    3. Pickups happen after loads become available.
+        //    4. Dropoffs happen before deadlines.
+        //
+        // cart
+        //   The cart that will perform this job. Cart specifies its capacity along
+        //   with for initial location and payload.
+        // jobs
+        //   An array of jobs the cart should perform. The number of jobs should
+        //   not exceed the `maxJobs` limit provided to the constructor.
+        // time
+        //   The time at which the route should start. This value is passed to the
+        //   estimator functions. This allows the estimator functions to model
+        //   effects like rush hour conjestion.
+        //
+        // Returns the Route with the shortest working time that satisfies the
+        // constraints. Working time is defined as time that the cart is moving
+        // between locations, waiting to load, loading, and unloading. It does
+        // not include time when the cart is out of service.
+        //
+        // Returns null if no Route satisfies the constraints.
+        Route* getBestRoute();
 
         void explainRoute();
 

@@ -5,6 +5,8 @@ set(CPPFILES
 )
 
 set(PRIVATE_HFILES
+	Action.h
+	Route.h
     RoutePlanner.h
 )
 

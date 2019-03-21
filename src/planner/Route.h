@@ -22,29 +22,41 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-// RoutePlanner
+// Route
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "RoutePlanner.h"
+#pragma once
+
+#include <cstdint>
+
+#include "../planner/Action.h"
+#include "../environment/Cart.h"
 
 namespace Route13Plan
 {
 
-    RoutePlanner::RoutePlanner(ILocations* locations, Carts* carts, Jobs* jobs) :
-        m_locations(locations),
-        m_carts(carts),
-        m_jobs(jobs)
-    {
-    }
+    // A Route is an ordered sequence of Actions. Typically, the Actions that
+    // make up a Route are the union of the Actions associated with a number of
+    // Jobs.
+    //
+    // A Route represents the interleaving of Actions requires to perform a set
+    // of Jobs.
+    //
+    // Without the concept of a Route, it would not be possible to interleave the
+    // Actions of multiple Jobs. This would preclude opportunities like picking
+    // up items for Job B, while tranporting items for Job A, e.g.
+    //
+    //   Job A: pickup 5 at location 0
+    //   Job B: pickup 7 at location 3
+    //   Job A: dropoff 5 at location 4
+    //   Job B: dropoff 7 at location 5.
+    class Route {
+    public:
+        Cart* cart;
+        SimTime workingTime;
+        int32_t score;
+        std::vector<IAction*> actions;
+    };
 
-    Route* RoutePlanner::getBestRoute()
-    {
-        return NULL;
-    }
-
-    void RoutePlanner::explainRoute()
-    {
-
-    }
 }
