@@ -29,6 +29,7 @@
 #pragma once
 
 #include <cstdint>
+#include <iostream>
 
 #include "../environment/Job.h"
 
@@ -45,13 +46,20 @@ namespace Route13Plan
     // sequences of Actions.
     class IAction {
     public:
+        IAction(IJob* jobp, ActionType typ) : job(jobp), type(typ) {};
+        virtual void print(std::ostream&) = 0;
+
         IJob* job;
         ActionType type;
     };
 
     // PickupAction loads a cart with a quantity of items, at a certain location,
     // after a time when the items become available.
-    class PickupAction : IAction {
+    class PickupAction : public IAction {
+    public:
+        PickupAction(IJob* job, LocationId loc, SimTime pickupAfter, int32_t quant);
+        void print(std::ostream&);
+
         LocationId location;
         SimTime time;
         int32_t quantity;
@@ -59,7 +67,11 @@ namespace Route13Plan
 
     // DropoffAction unloads a quantity of items from a cart, at a certain location,
     // before a certain time.
-    class DropoffAction : IAction {
+    class DropoffAction : public IAction {
+    public:
+        DropoffAction(IJob* job, LocationId loc, SimTime dropoffBefore, int32_t quant);
+        void print(std::ostream&);
+
         LocationId location;
         SimTime time;
         int32_t quantity;
@@ -67,7 +79,11 @@ namespace Route13Plan
 
     // SuspendAction takes a cart out of service, at a certain location, within a
     // window of time.
-    class SuspendAction : IAction {
+    class SuspendAction : public IAction {
+    public:
+        SuspendAction(IJob* job, LocationId loc, SimTime suspendAfter, SimTime resumeBefore);
+        void print(std::ostream&);
+
         LocationId location;
         SimTime suspendTime;
         SimTime resumeTime;
