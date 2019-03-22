@@ -22,26 +22,21 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-// Route
+// RouteState
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "Route.h"
+#include "RouteState.h"
 
 namespace Route13Plan
 {
-
-    Route::Route(Cart* cartp, Actions* acts, SimTime time, int32_t scorenbr) :
-        cart(cartp),
-        actions(acts),
-        workingTime(time),
-        score(scorenbr)
+    RouteState::RouteState(Cart* cartp, SimTime startingTime) :
+        startTime(startingTime),
+        time(0),
+        location(cartp->lastKnownLocation),
+        payload(cartp->payload),
+        workingTime(0),
+        quantityUnloaded(0)
     {
-    }
-
-    void Route::print(std::ostream& out)
-    {
-        out << "Route for cart " << cart->id << " (working time = " << workingTime << ":" << std::endl;
-        actions->print(out);
     }
 }

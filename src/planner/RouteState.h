@@ -22,26 +22,32 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-// Route
+// RouteState
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "Route.h"
+#pragma once
+
+#include <cstdint>
+
+#include "../environment/Cart.h"
+#include "Actions.h"
 
 namespace Route13Plan
 {
 
-    Route::Route(Cart* cartp, Actions* acts, SimTime time, int32_t scorenbr) :
-        cart(cartp),
-        actions(acts),
-        workingTime(time),
-        score(scorenbr)
-    {
-    }
+    // A RouteState captures the current state information after running
+    // a sequence of actions on a specific cart beginning at a certain point in time.
+    class RouteState {
+    public:
+        RouteState(Cart* cart, SimTime time);
+        
+        SimTime startTime;
+        SimTime time;
+        LocationId location;
+        int32_t payload;
+        SimTime workingTime;
+        int32_t quantityUnloaded;
+    };
 
-    void Route::print(std::ostream& out)
-    {
-        out << "Route for cart " << cart->id << " (working time = " << workingTime << ":" << std::endl;
-        actions->print(out);
-    }
 }

@@ -52,6 +52,7 @@ set(ENVIRONMENT_HFILES
   ${CMAKE_SOURCE_DIR}/src/planner/Actions.h
   ${CMAKE_SOURCE_DIR}/src/planner/Route.h
   ${CMAKE_SOURCE_DIR}/src/planner/RoutePlanner.h
+  ${CMAKE_SOURCE_DIR}/src/planner/RouteState.h
 )
 
 set(PUBLIC_HFILES

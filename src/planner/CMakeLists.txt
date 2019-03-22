@@ -5,6 +5,7 @@ set(CPPFILES
 	Actions.cpp
 	Route.cpp
     RoutePlanner.cpp
+	RouteState.cpp
 )
 
 set(PRIVATE_HFILES
@@ -12,6 +13,7 @@ set(PRIVATE_HFILES
 	Actions.h
 	Route.h
     RoutePlanner.h
+	RouteState.h
 )
 
 add_library(Planner ${CPPFILES} ${PRIVATE_HFILES} ${PUBLIC_HFILES})
