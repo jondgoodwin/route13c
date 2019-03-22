@@ -26,7 +26,6 @@
 #include "../../src/environment/LinearLocations.h"
 #include "../../src/environment/Carts.h"
 #include "../../src/environment/Jobs.h"
-#include "../../src/planner/Actions.h"
 #include "../../src/planner/RoutePlanner.h"
 
 using namespace Route13Plan;
@@ -56,7 +55,4 @@ int main() {
 
     auto planner = new RoutePlanner(&locations, &carts, &jobs);
     planner->explainRoute();
-
-    auto actions = new Actions(&jobs);
-    actions->print(std::cout);
 }

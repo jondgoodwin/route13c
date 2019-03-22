@@ -3,6 +3,7 @@
 set(CPPFILES
 	Action.cpp
 	Actions.cpp
+	Route.cpp
     RoutePlanner.cpp
 )
 

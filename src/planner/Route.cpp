@@ -26,40 +26,22 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#pragma once
-
-#include <cstdint>
-
-#include "../environment/Cart.h"
-#include "Actions.h"
+#include "Route.h"
 
 namespace Route13Plan
 {
 
-    // A Route is an ordered sequence of Actions. Typically, the Actions that
-    // make up a Route are the union of the Actions associated with a number of
-    // Jobs.
-    //
-    // A Route represents the interleaving of Actions requires to perform a set
-    // of Jobs.
-    //
-    // Without the concept of a Route, it would not be possible to interleave the
-    // Actions of multiple Jobs. This would preclude opportunities like picking
-    // up items for Job B, while tranporting items for Job A, e.g.
-    //
-    //   Job A: pickup 5 at location 0
-    //   Job B: pickup 7 at location 3
-    //   Job A: dropoff 5 at location 4
-    //   Job B: dropoff 7 at location 5.
-    class Route {
-    public:
-        Route(Cart* cart, Actions* actions, SimTime time, int32_t score = 0);
-        void print(std::ostream&);
-        
-        Cart* cart;
-        SimTime workingTime;
-        int32_t score;
-        Actions* actions;
-    };
+    Route::Route(Cart* cartp, Actions* acts, SimTime time, int32_t scorenbr = 0) :
+        cart(cartp),
+        actions(acts),
+        workingTime(time),
+        score(scorenbr)
+    {
+    }
 
+    void Route::print(std::ostream& out)
+    {
+        out << "Route for cart " << cart->id << " (working time = " << workingTime << ":" << std::endl;
+        actions->print(out);
+    }
 }
