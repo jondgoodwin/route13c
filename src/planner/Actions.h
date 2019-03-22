@@ -22,45 +22,32 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-// Job
+// Actions
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "Job.h"
+#pragma once
+
+#include <vector>
+#include <iostream>
+
+#include "../environment/Jobs.h"
+#include "Action.h"
 
 namespace Route13Plan
 {
 
-    JobId IJob::nextId = 0;
+    // A fleet of carts used to transport packages
+    class Actions {
+    public:
+        // Create a pair of Actions from every job
+        Actions(Jobs* jobs);
 
-    IJob::IJob(JobType jtype) : id(nextId++), type(jtype), assignedTo(nullptr)
-    {
+        // Output to stream information about the fleet
+        void print(std::ostream& out);
+
+        std::vector<std::unique_ptr<IAction>> actions;
+
     };
-
-    TransferJob::TransferJob(int32_t number,
-                             LocationId pickupLoc,
-                             SimTime pickupTime,
-                             LocationId dropLoc,
-                             SimTime dropBefore) :
-        IJob(JobType::TRANSFER),
-        state(TransferJobState::BEFORE_PICKUP),
-        quantity(number),
-        pickupLocation(pickupLoc),
-        pickupAfter(pickupTime),
-        dropoffLocation(dropLoc),
-        dropoffBefore(dropBefore)
-    {
-    }
-
-    OutOfServiceJob::OutOfServiceJob(LocationId suspendLoc,
-        SimTime suspendTime,
-        SimTime resumeTime) :
-        IJob(JobType::OUT_OF_SERVICE),
-        state(OutOfServiceJobState::BEFORE_BREAK),
-        suspendLocation(suspendLoc),
-        suspendTime(suspendTime),
-        resumeTime(resumeTime)
-    {
-    }
 
 }

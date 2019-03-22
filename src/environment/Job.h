@@ -38,16 +38,16 @@ namespace Route13Plan
 
     typedef uint32_t JobId;
 
+    enum JobType {
+        TRANSFER,
+        OUT_OF_SERVICE
+    };
+
     // A Job specifies some requirement that a cart needs to perform
     class IJob {
     public:
 
         static JobId nextId;
-
-        enum JobType {
-            TRANSFER,
-            OUT_OF_SERVICE
-        };
 
         IJob(JobType jtype);
         IJob() = delete;
@@ -55,6 +55,11 @@ namespace Route13Plan
         JobId id;
         JobType type;
         Cart* assignedTo;
+    };
+
+    enum TransferJobState {
+        BEFORE_PICKUP,
+        ENROUTE
     };
 
     // A TransferJob requires a cart to pickup x packages by the pickup time at one location
@@ -74,11 +79,6 @@ namespace Route13Plan
             SimTime dropBefore);
         TransferJob() = delete;
 
-        enum TransferJobState {
-            BEFORE_PICKUP,
-            ENROUTE
-        };
-
         TransferJobState state;
 
         int32_t quantity;
@@ -88,6 +88,11 @@ namespace Route13Plan
 
         LocationId dropoffLocation;
         SimTime dropoffBefore;
+    };
+
+    enum OutOfServiceJobState {
+        BEFORE_BREAK,
+        ON_BREAK
     };
 
     // An OutOfServiceJob requires a cart to arrive at a specified location
@@ -109,11 +114,6 @@ namespace Route13Plan
             SimTime suspendTime,
             SimTime resumeTime);
         OutOfServiceJob() = delete;
-
-        enum OutOfServiceJobState {
-            BEFORE_BREAK,
-            ON_BREAK
-        };
 
         OutOfServiceJobState state;
         LocationId suspendLocation;

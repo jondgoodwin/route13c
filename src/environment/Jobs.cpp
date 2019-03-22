@@ -94,7 +94,7 @@ namespace Route13Plan
             auto ijob = jobi->get();
             switch (ijob->type)
             {
-            case IJob::JobType::TRANSFER:
+            case JobType::TRANSFER:
             {
                 auto tjob = static_cast<TransferJob*>(ijob);
                 std::cout << "    Job " << tjob->id << " move " << tjob->quantity
@@ -102,7 +102,7 @@ namespace Route13Plan
                     << " between " << tjob->pickupAfter << " and " << tjob->dropoffBefore << std::endl;
                 break;
             }
-            case IJob::JobType::OUT_OF_SERVICE:
+            case JobType::OUT_OF_SERVICE:
             {
                 auto ojob = static_cast<OutOfServiceJob*>(ijob);
                 std::cout << "    Job " << ojob->id << " out-of-service at " << ojob->suspendLocation

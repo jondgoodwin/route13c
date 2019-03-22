@@ -48,6 +48,8 @@ set(ENVIRONMENT_HFILES
   ${CMAKE_SOURCE_DIR}/src/environment/Job.h
   ${CMAKE_SOURCE_DIR}/src/environment/Jobs.h
   ${CMAKE_SOURCE_DIR}/src/environment/LinearLocations.h
+  ${CMAKE_SOURCE_DIR}/src/planner/Action.h
+  ${CMAKE_SOURCE_DIR}/src/planner/Actions.h
   ${CMAKE_SOURCE_DIR}/src/planner/Route.h
   ${CMAKE_SOURCE_DIR}/src/planner/RoutePlanner.h
 )

@@ -2,11 +2,13 @@
 
 set(CPPFILES
 	Action.cpp
+	Actions.cpp
     RoutePlanner.cpp
 )
 
 set(PRIVATE_HFILES
 	Action.h
+	Actions.h
 	Route.h
     RoutePlanner.h
 )
