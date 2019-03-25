@@ -31,9 +31,7 @@
 namespace Route13Plan
 {
 
-    Carts::Carts(int32_t loadSpeed, int32_t unloadSpeed) :
-        m_loadSpeed(loadSpeed),
-        m_unloadSpeed(unloadSpeed)
+    Carts::Carts()
     {
     }
 
@@ -69,18 +67,4 @@ namespace Route13Plan
         }
         out << std::endl;
     }
-
-    // The loadTimeEstimator models the time to load items onto a cart.
-    SimTime Carts::loadTimeEstimator(uint32_t quantity)
-    {
-        return m_loadSpeed * quantity;
-    }
-
-    // The unloadTimeEstimator models the time to unload items from a cart.
-    SimTime Carts::unloadTimeEstimator(int32_t quantity)
-    {
-        return m_unloadSpeed * quantity;
-    }
-
-
 }

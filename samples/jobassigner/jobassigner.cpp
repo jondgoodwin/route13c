@@ -42,16 +42,16 @@ using namespace Route13Plan;
 int main() {
 
     // Define the location graph
-    auto locations = LinearLocations(LOCATION_COUNT, LOCATION_DISTANCE);
+    auto locations = LinearLocations(LOCATION_COUNT, LOCATION_DISTANCE, LOAD_SPEED, UNLOAD_SPEED);
 
     // Create a fleet of some randomly-located carts
-    auto carts = Carts(LOAD_SPEED, UNLOAD_SPEED);
+    auto carts = Carts();
     carts.createRandom(CART_COUNT, CART_CAPACITY, locations.getCount());
     carts.print(std::cout);
 
     // Create a set of random jobs.
     auto jobs = Jobs();
-    jobs.createRandom(JOB_COUNT, &locations, &carts, CART_CAPACITY, MAX_START_TIME, SLACK);
+    jobs.createRandom(JOB_COUNT, &locations, CART_CAPACITY, MAX_START_TIME, SLACK);
     jobs.print(std::cout);
 
 }

@@ -56,7 +56,6 @@ namespace Route13Plan
         // Create a random list of jobs
         void createRandom(int32_t count,
                           ILocations* locations,
-                          Carts* carts,
                           int32_t capacity,
                           SimTime maxStart,
                           int32_t slack);

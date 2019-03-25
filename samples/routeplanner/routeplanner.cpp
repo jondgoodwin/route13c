@@ -39,10 +39,10 @@ using namespace Route13Plan;
 int main() {
 
     // Define the location graph
-    auto locations = LinearLocations(LOCATION_COUNT, LOCATION_DISTANCE);
+    auto locations = LinearLocations(LOCATION_COUNT, LOCATION_DISTANCE, LOAD_SPEED, UNLOAD_SPEED);
 
     // Create a fleet with one empty cart starting at location 0
-    auto carts = Carts(LOAD_SPEED, UNLOAD_SPEED);
+    auto carts = Carts();
     carts.addCart(new Cart(0, 0, CART_CAPACITY, 0));
     carts.print(std::cout);
 

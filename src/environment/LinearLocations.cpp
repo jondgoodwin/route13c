@@ -31,9 +31,11 @@
 namespace Route13Plan
 {
 
-    LinearLocations::LinearLocations(int32_t locs, SimTime distance) :
+    LinearLocations::LinearLocations(int32_t locs, SimTime distance, int32_t loadSpeed, int32_t unloadSpeed) :
         ILocations(locs),
-        m_distance(distance)
+        m_distance(distance),
+        m_loadSpeed(loadSpeed),
+        m_unloadSpeed(unloadSpeed)
     {
     };
 
@@ -65,4 +67,15 @@ namespace Route13Plan
         }
     }
 
+    // The loadTimeEstimator models the time to load items onto a cart.
+    SimTime LinearLocations::loadTimeEstimator(uint32_t quantity)
+    {
+        return m_loadSpeed * quantity;
+    }
+
+    // The unloadTimeEstimator models the time to unload items from a cart.
+    SimTime LinearLocations::unloadTimeEstimator(int32_t quantity)
+    {
+        return m_unloadSpeed * quantity;
+    }
 }

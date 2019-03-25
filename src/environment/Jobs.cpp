@@ -54,7 +54,6 @@ namespace Route13Plan
     // Create a random list of job requirements
     void Jobs::createRandom(int32_t count,
                             ILocations* locations,
-                            Carts* carts,
                             int32_t capacity,
                             SimTime maxStart,
                             int32_t slack)
@@ -70,8 +69,8 @@ namespace Route13Plan
             // End time is based on minimum job duration plus random slack.
             auto minDuration =
                 locations->transitTimeEstimator(startLoc, endLoc) +
-                carts->loadTimeEstimator(quantity) +
-                carts->unloadTimeEstimator(quantity);
+                locations->loadTimeEstimator(quantity) +
+                locations->unloadTimeEstimator(quantity);
             auto endTime = startTime + minDuration * (1 + rand() % slack);
 
             auto job = new TransferJob(quantity, startLoc, startTime, endLoc, endTime);

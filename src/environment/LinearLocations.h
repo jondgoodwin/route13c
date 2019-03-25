@@ -37,18 +37,29 @@ namespace Route13Plan
 
     // This models a collection of locations along a line, evenly spaced.
     // The distance between two locations is measured in transit time (SimTime).
+    //
+    // It implements estimators that determine how long it takes
+    // for work to get accomplished, including cart transit times and
+    // package loading and unloading.
     class LinearLocations : public ILocations {
     public:
-        LinearLocations(int32_t locations, SimTime distance);
-
-        // Calculate the transit time between two locations
-        SimTime transitTimeEstimator(LocationId origin, LocationId destination);
+        LinearLocations(int32_t locations, SimTime distance, int32_t loadSpeed, int32_t unloadSpeed);
 
         // Return the next location along the path from the specified origin to the destination.
         LocationId routeNextStep(LocationId origin, LocationId destination);
 
+        // Calculate the transit time between two locations
+        SimTime transitTimeEstimator(LocationId origin, LocationId destination);
+
+        // The loadTimeEstimator models the time to load items onto a cart.
+        SimTime loadTimeEstimator(uint32_t quantity);
+
+        // The unloadTimeEstimator models the time to unload items from a cart.
+        SimTime unloadTimeEstimator(int32_t quantity);
+
     private:
         SimTime m_distance;
+        int32_t m_loadSpeed;
+        int32_t m_unloadSpeed;
     };
-
 }

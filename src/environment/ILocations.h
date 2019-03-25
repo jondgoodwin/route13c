@@ -37,6 +37,12 @@ namespace Route13Plan
 
     typedef uint32_t SimTime;
 
+    // ILocations models the "field" on which carts travel to get work down.
+    // It is useful for determining best routes.
+    //
+    // Importantly, it implements estimators that determine how long it takes
+    // for work to get accomplished, including cart transit times and
+    // package loading and unloading.
     class ILocations {
     public:
         ILocations(int32_t count) : m_count(count) {};
@@ -48,6 +54,12 @@ namespace Route13Plan
 
         // Return the next location along the path from the specified origin to the destination.
         virtual LocationId routeNextStep(LocationId origin, LocationId destination) = 0;
+
+        // The loadTimeEstimator models the time to load items onto a cart.
+        virtual SimTime loadTimeEstimator(uint32_t quantity) = 0;
+
+        // The unloadTimeEstimator models the time to unload items from a cart.
+        virtual SimTime unloadTimeEstimator(int32_t quantity) = 0;
 
     private:
         int32_t m_count;
