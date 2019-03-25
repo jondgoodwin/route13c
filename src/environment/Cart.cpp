@@ -31,11 +31,12 @@
 namespace Route13Plan
 {
 
-    Cart::Cart(int32_t ident, LocationId lastloc, int32_t cap, int32_t pay) :
+    Cart::Cart(int32_t ident, int32_t cap, LocationId lastloc, SimTime time, int32_t pay) :
         id(ident),
-        lastKnownLocation(lastloc),
         capacity(cap),
-        payload(pay)
+        availLocation(lastloc),
+        availPayload(pay),
+        availTime(time)
     {
     };
 

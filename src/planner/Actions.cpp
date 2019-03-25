@@ -45,14 +45,11 @@ namespace Route13Plan
                 if (xferJob->state == TransferJobState::BEFORE_PICKUP) {
                     actions.push_back(std::unique_ptr<IAction>(
                         new PickupAction(job.get(), xferJob->pickupLocation, xferJob->pickupAfter, xferJob->quantity)));
-                }
-                actions.push_back(std::unique_ptr<IAction>(
-                    new DropoffAction(job.get(), xferJob->dropoffLocation, xferJob->dropoffBefore, xferJob->quantity)));
-                if (xferJob->state == TransferJobState::BEFORE_PICKUP) {
-                    actions.push_back(nullptr);
-                }
+                    actions.push_back(std::unique_ptr<IAction>(
+                        new DropoffAction(job.get(), xferJob->dropoffLocation, xferJob->dropoffBefore, xferJob->quantity)));
                 }
                 break;
+            }
             case JobType::OUT_OF_SERVICE:
             {
                 auto oosJob = static_cast<OutOfServiceJob*>(job.get());
@@ -61,8 +58,8 @@ namespace Route13Plan
                         new SuspendAction(job.get(), oosJob->suspendLocation, oosJob->suspendTime, oosJob->resumeTime)));
                     actions.push_back(nullptr);
                 }
-            }
                 break;
+            }
             default:
                 ;
             }

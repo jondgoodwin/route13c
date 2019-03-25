@@ -43,7 +43,7 @@ int main() {
 
     // Create a fleet with one empty cart starting at location 0
     auto carts = Carts();
-    carts.addCart(new Cart(0, 0, CART_CAPACITY, 0));
+    carts.addCart(new Cart(0, CART_CAPACITY, 0));
     carts.print(std::cout);
 
     // Create a simple set of transfer job requirements

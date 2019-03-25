@@ -36,17 +36,28 @@
 namespace Route13Plan
 {
 
-    // A RouteState captures the current state information after running
-    // a sequence of actions on a specific cart beginning at a certain point in time.
+    // A RouteState captures the current state of a cart after running
+    // some sequence of actions beginning after a certain point in time.
     class RouteState {
     public:
         RouteState(Cart* cart, SimTime time);
         
+        // When the simulation began 
         SimTime startTime;
+
+        // The current time after all actions are fully completed
         SimTime time;
+
+        // The current location after performing completed actions
         LocationId location;
+
+        // How many packages are still in the cart after performing completed actions
         int32_t payload;
+
+        // How much time has passed since actions started
         SimTime workingTime;
+
+        // How many packages have been unloaded by all completed actions
         int32_t quantityUnloaded;
     };
 

@@ -38,10 +38,15 @@ namespace Route13Plan
 {
 
     // A Cart transports items from one location to another.
+    //
+    // Several information about the cart tells us about the state
+    // of the cast when it is next available for further planned actions.
+    // This is important if a cart is currently in motion,
+    // handling an already tasked assignment.
     class Cart {
     public:
 
-        Cart(int32_t id, LocationId lastKnownLocation, int32_t capacity, int32_t payload = 0);
+        Cart(int32_t id, int32_t capacity, LocationId availLocation, SimTime time = 0, int32_t payload = 0);
         Cart() = delete;
 
         CartId id;
@@ -49,12 +54,14 @@ namespace Route13Plan
         // Cart capacity. Could be number of boxes/containers, tons, gallons, etc.
         int32_t capacity;
 
-        // Amount of capacity currently in use.
-        int32_t payload;
+        // Location of the cart once it becomes available for further use
+        LocationId availLocation;
 
-        // Last known location of the cart.
-        LocationId lastKnownLocation;
+        // When the cart will be available for follow-work (0 = ready any time)
+        SimTime availTime;
 
+        // Amount of capacity in use once cart is available for further use
+        int32_t availPayload;
 
         // DESIGN NOTE: information about jobs currently assigned to a cart is
         // encoded in the Job data structure. Don't want to duplicate this

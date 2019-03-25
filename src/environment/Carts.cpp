@@ -45,7 +45,7 @@ namespace Route13Plan
     void Carts::createRandom(int32_t cartCount, int32_t capacity, int32_t locCount) {
         for (int32_t i = 0; i < cartCount; ++i)
         {
-            carts.push_back(std::unique_ptr<Cart>(new Cart(i, rand() % locCount, capacity, 0)));
+            carts.push_back(std::unique_ptr<Cart>(new Cart(i, capacity, rand() % locCount)));
         }
     }
 
@@ -62,7 +62,7 @@ namespace Route13Plan
         for (auto carti = carts.begin(); carti != carts.end(); ++carti)
         {
             auto &cart = *carti;
-            out << "     Cart " << cart->id << " at location " << cart->lastKnownLocation
+            out << "     Cart " << cart->id << " at location " << cart->availLocation
                 << " with capacity " << cart->capacity << "." << std::endl;
         }
         out << std::endl;

@@ -26,15 +26,17 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+#include <algorithm>
+
 #include "RouteState.h"
 
 namespace Route13Plan
 {
     RouteState::RouteState(Cart* cartp, SimTime startingTime) :
         startTime(startingTime),
-        time(0),
-        location(cartp->lastKnownLocation),
-        payload(cartp->payload),
+        time(std::max(startingTime, cartp->availTime)),
+        location(cartp->availLocation),
+        payload(cartp->availPayload),
         workingTime(0),
         quantityUnloaded(0)
     {
