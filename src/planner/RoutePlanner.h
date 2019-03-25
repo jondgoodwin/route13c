@@ -36,16 +36,16 @@
 namespace Route13Plan
 {
 
-   // RoutePlanner finds the optimal order of pickups and dropoffs, given a
-   // starting location and a set of Jobs. The planning algorithm uses a brute
-   // force enumeration of every possible route. Routes that don't meet delivery
-   // deadline constraints and cart capacity constraints are excluded from
-   // consideration. The algorithm selects the route with the shortest elapsed
-   // time.
+    // RoutePlanner finds the optimal order of pickups and dropoffs, given a
+    // cart and a set of Jobs. The planning algorithm uses a brute
+    // force enumeration of every possible route. Routes that don't meet delivery
+    // deadline constraints and cart capacity constraints are excluded from
+    // consideration. The algorithm selects the route with the shortest elapsed
+    // time.
     class RoutePlanner {
     public:
 
-        RoutePlanner(ILocations* locations, Carts* carts, Jobs* jobs);
+        RoutePlanner(ILocations* locations, int32_t maxJobs, bool logger);
 
         // Finds the shortest duration Route for a set of jobs, while satisfying
         // the following constraints:
@@ -72,14 +72,15 @@ namespace Route13Plan
         // not include time when the cart is out of service.
         //
         // Returns null if no Route satisfies the constraints.
-        Route* getBestRoute();
+        Route* getBestRoute(Cart* cart, Jobs* jobs, SimTime time);
 
         void explainRoute();
 
     private:
         ILocations* m_locations;
-        Carts* m_carts;
-        Jobs* m_jobs;
+        int32_t m_maxJobs;
+        bool m_logger;
+        int32_t m_failedRouteCount;
     };
 
 }

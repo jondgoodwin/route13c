@@ -31,7 +31,7 @@
 namespace Route13Plan
 {
 
-    // Create a pair of Actions from every job
+    // Create fine-grained Actions from every job
     Actions::Actions(Jobs* jobs)
     {
         for (auto jobi = jobs->jobs.begin(); jobi != jobs->jobs.end(); ++jobi)
@@ -56,7 +56,6 @@ namespace Route13Plan
                 if (oosJob->state == OutOfServiceJobState::BEFORE_BREAK) {
                     actions.push_back(std::unique_ptr<IAction>(
                         new SuspendAction(job.get(), oosJob->suspendLocation, oosJob->suspendTime, oosJob->resumeTime)));
-                    actions.push_back(nullptr);
                 }
                 break;
             }

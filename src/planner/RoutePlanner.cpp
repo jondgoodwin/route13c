@@ -27,19 +27,40 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "RoutePlanner.h"
+#include "RouteState.h"
 
 namespace Route13Plan
 {
 
-    RoutePlanner::RoutePlanner(ILocations* locations, Carts* carts, Jobs* jobs) :
+    RoutePlanner::RoutePlanner(ILocations* locations, int32_t maxJobs, bool logger) :
         m_locations(locations),
-        m_carts(carts),
-        m_jobs(jobs)
+        m_maxJobs(maxJobs),
+        m_logger(logger),
+        m_failedRouteCount(0)
     {
     }
 
-    Route* RoutePlanner::getBestRoute()
+    Route* RoutePlanner::getBestRoute(Cart* cart, Jobs* jobs, SimTime time)
     {
+        int32_t successfulRouteCount = 0;
+        m_failedRouteCount = 0;
+
+        auto routeState = new RouteState(cart, time);
+        auto actions = new Actions(jobs);
+        bool success = false;
+        for (auto actioni = actions->actions.begin(); actioni != actions->actions.end(); ++actioni)
+        {
+            auto actionp = actioni->get();
+            success = actionp->apply(routeState, routeState, m_locations, m_logger);
+            if (!success)
+            {
+                ++m_failedRouteCount;
+                break;
+            }
+        }
+        if (success)
+            ++successfulRouteCount;
+
         return NULL;
     }
 
