@@ -35,6 +35,7 @@
 
 namespace Route13Plan
 {
+    class RouteState;
 
     enum ActionType {
         PICKUP,
@@ -48,6 +49,7 @@ namespace Route13Plan
     public:
         IAction(IJob* jobp, ActionType typ) : job(jobp), type(typ) {};
         virtual void print(std::ostream&) = 0;
+        virtual bool apply(RouteState* newState, RouteState* oldState, ILocations* locations, bool logger) = 0;
 
         IJob* job;
         ActionType type;
@@ -59,6 +61,9 @@ namespace Route13Plan
     public:
         PickupAction(IJob* job, LocationId loc, SimTime pickupAfter, int32_t quant);
         void print(std::ostream&);
+        // Apply pick up action to calculate new RouteState from old
+        // Return false if constraints violated. 
+        bool apply(RouteState* newState, RouteState* oldState, ILocations* locations, bool logger);
 
         LocationId location;
         SimTime time;
@@ -71,6 +76,9 @@ namespace Route13Plan
     public:
         DropoffAction(IJob* job, LocationId loc, SimTime dropoffBefore, int32_t quant);
         void print(std::ostream&);
+        // Apply pick up action to calculate new RouteState from old
+        // Return false if constraints violated. 
+        bool apply(RouteState* newState, RouteState* oldState, ILocations* locations, bool logger);
 
         LocationId location;
         SimTime time;
@@ -83,6 +91,9 @@ namespace Route13Plan
     public:
         SuspendAction(IJob* job, LocationId loc, SimTime suspendAfter, SimTime resumeBefore);
         void print(std::ostream&);
+        // Apply pick up action to calculate new RouteState from old
+        // Return false if constraints violated. 
+        bool apply(RouteState* newState, RouteState* oldState, ILocations* locations, bool logger);
 
         LocationId location;
         SimTime suspendTime;

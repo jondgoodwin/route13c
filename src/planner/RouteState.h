@@ -45,6 +45,9 @@ namespace Route13Plan
         // When the simulation began 
         SimTime startTime;
 
+        // Cart's capacity
+        int32_t capacity;
+
         // The current time after all actions are fully completed
         SimTime time;
 

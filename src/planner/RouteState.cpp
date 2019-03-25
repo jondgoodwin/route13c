@@ -34,6 +34,7 @@ namespace Route13Plan
 {
     RouteState::RouteState(Cart* cartp, SimTime startingTime) :
         startTime(startingTime),
+        capacity(cartp->capacity),
         time(std::max(startingTime, cartp->availTime)),
         location(cartp->availLocation),
         payload(cartp->availPayload),
