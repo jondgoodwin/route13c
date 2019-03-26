@@ -70,7 +70,9 @@ namespace Route13Plan
 
             // We won't try an action twice,
             // nor will we try an action that depends on an action not yet performed
-            else if (actionInUse[nextActionId]) {
+            else if (actionInUse[nextActionId]
+                 || (actions->actions[nextActionId]->depends != NO_DEPENDENCY && 
+                    !actionInUse[actions->actions[nextActionId]->depends])) {
             }
 
             // Apply action on route state, if it violates a constraint this is a failed action sequence

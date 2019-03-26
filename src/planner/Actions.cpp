@@ -46,7 +46,8 @@ namespace Route13Plan
                     actions.push_back(std::unique_ptr<IAction>(
                         new PickupAction(job.get(), xferJob->pickupLocation, xferJob->pickupAfter, xferJob->quantity)));
                     actions.push_back(std::unique_ptr<IAction>(
-                        new DropoffAction(job.get(), xferJob->dropoffLocation, xferJob->dropoffBefore, xferJob->quantity)));
+                        new DropoffAction(job.get(), xferJob->dropoffLocation, xferJob->dropoffBefore, xferJob->quantity,
+                            actions.size()-1)));
                 }
                 break;
             }

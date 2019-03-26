@@ -107,8 +107,8 @@ namespace Route13Plan
         return true;
     }
 
-    DropoffAction::DropoffAction(IJob* jobp, LocationId loc, SimTime dropoffBefore, int32_t quant) :
-        IAction(jobp, ActionType::DROPOFF),
+    DropoffAction::DropoffAction(IJob* jobp, LocationId loc, SimTime dropoffBefore, int32_t quant, size_t depends) :
+        IAction(jobp, ActionType::DROPOFF, depends),
         location(loc),
         time(dropoffBefore),
         quantity(quant)

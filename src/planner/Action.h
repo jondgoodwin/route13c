@@ -37,22 +37,33 @@ namespace Route13Plan
 {
     class RouteState;
 
+    // What sort of action this is:  pick up, drop off, suspend
     enum ActionType {
         PICKUP,
         DROPOFF,
         SUSPEND
     };
 
+    #define NO_DEPENDENCY -1
+
     // Actions are the smallest unit of work. Jobs and Plans consist of ordered
     // sequences of Actions.
     class IAction {
     public:
-        IAction(IJob* jobp, ActionType typ) : job(jobp), type(typ) {};
+        IAction(IJob* jobp, ActionType typ, size_t dep = NO_DEPENDENCY) : job(jobp), type(typ), depends(dep) {};
         virtual void print(std::ostream&) = 0;
         virtual bool apply(RouteState* newState, RouteState* oldState, ILocations* locations, bool logger) = 0;
 
+        // The job this action was generated from
         IJob* job;
+
+        // What sort of action this is:  pick up, drop off, suspend
         ActionType type;
+
+        // References another action which must be applied before this one in a route sequence
+        // (e.g., a drop off action will depend on an earlier pick up action)
+        // It is NO_DEPENDENCY if there are no dependencies
+        size_t depends;
     };
 
     // PickupAction loads a cart with a quantity of items, at a certain location,
@@ -74,7 +85,7 @@ namespace Route13Plan
     // before a certain time.
     class DropoffAction : public IAction {
     public:
-        DropoffAction(IJob* job, LocationId loc, SimTime dropoffBefore, int32_t quant);
+        DropoffAction(IJob* job, LocationId loc, SimTime dropoffBefore, int32_t quant, size_t depends);
         void print(std::ostream&);
         // Apply pick up action to calculate new RouteState from old
         // Return false if constraints violated. 
