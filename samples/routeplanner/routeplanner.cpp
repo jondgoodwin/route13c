@@ -55,14 +55,6 @@ int main() {
     jobs.print(std::cout);
 
     // Plan best route for first cart
-    auto cart = carts.carts[0].get();
-    Route route(cart, &jobs);
-    std::cout << "#########################" << std::endl;
-    std::cout << "Route planning complete" << std::endl << std::endl;
-    if (route.getBestRoute(&locations, 0, true)) {
-        route.print(std::cout);
-    }
-    else {
-        std::cout << "No route found." << std::endl;
-    }
+    Route route(carts.carts[0].get(), &jobs);
+    route.getBestRoute(&locations, 0, true);
 }

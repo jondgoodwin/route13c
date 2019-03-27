@@ -70,7 +70,7 @@ namespace Route13Plan
         //    3. Pickups happen after loads become available.
         //    4. Dropoffs happen before deadlines.
         //
-        // Returns true if a best acceptable route was found.
+        // Returns true if a quickest, acceptable route was found.
         // The best route has the highest quantity unloaded per working time.
         // Working time is defined as time that the cart is moving
         // between locations, waiting to load, loading, and unloading. It does
@@ -83,6 +83,7 @@ namespace Route13Plan
 
     private:
         Actions m_actions;
+        std::vector<int32_t> m_actionSeq;
         int32_t m_failedRouteCount;
 
     };

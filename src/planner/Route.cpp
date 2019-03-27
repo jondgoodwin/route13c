@@ -42,8 +42,17 @@ namespace Route13Plan
 
     void Route::print(std::ostream& out)
     {
-        out << "Route for cart " << cart->id << " (working time = " << workingTime << ":" << std::endl;
-        m_actions.print(out);
+        if (score > 0.0) {
+            out << "Route for cart " << cart->id << " (working time = " << workingTime
+                << " score = " << score << "):" << std::endl;
+            for (size_t i = 0; i < m_actionSeq.size(); ++i) {
+                out << "    ";
+                m_actions.actions[m_actionSeq[i]]->print(out);
+            }
+            out << std::endl;
+        }
+        else
+            out << "No constraint-free route has been determined." << std::endl;
     }
 
     bool Route::getBestRoute(ILocations* locations, SimTime time, bool logger)
@@ -58,6 +67,11 @@ namespace Route13Plan
         RouteState routeState(cart, time);
         std::vector<RouteState> states(actionCount + 1, routeState); // LIFO queue of states
 
+        if (logger) {
+            std::cout << "#########################" << std::endl;
+            std::cout << "Find best route" << std::endl << std::endl;
+        }
+
         // Test every valid combination of action sequences
         for (int32_t seq = 0; seq >= 0; )
         {
@@ -67,51 +81,82 @@ namespace Route13Plan
             if (nextActionId >= actionCount) {
                 actionSeq[seq] = 0;
                 --seq;
-                if (seq >= 0)
+                if (seq >= 0) {
                     actionInUse[actionSeq[seq]] = false;
+                    ++actionSeq[seq];
+                }
+                continue;
             }
 
             // We won't try an action twice,
             // nor will we try an action that depends on an action not yet performed
-            else if (actionInUse[nextActionId]
+            if (actionInUse[nextActionId]
                 || (m_actions.actions[nextActionId]->depends != NO_DEPENDENCY &&
                     !actionInUse[m_actions.actions[nextActionId]->depends])) {
+                ++actionSeq[seq];
+                continue;
             }
 
-            // Apply action on route state, if it violates a constraint this is a failed action sequence
-            else if (!m_actions.actions[nextActionId]->apply(&states[seq + 1], &states[seq], locations, logger)) {
+            if (logger) {
+                std::cout << std::endl << "Try this route of actions: ";
+                for (int32_t i = 0; i <= seq; ++i) {
+                    std::cout << actionSeq[i] << ", ";
+                }
+                std::cout << std::endl;
+            }
+
+            // Apply action on route state
+            // If it violates a constraint this is a failed action sequence
+            if (!m_actions.actions[nextActionId]->apply(&states[seq + 1], &states[seq], locations, logger)) {
                 ++m_failedRouteCount;
+                ++actionSeq[seq];
+                continue;
             }
 
-            // If action met constraints, keep going to try a follow-on action
-            else if (seq < actionCount - 1) {
+            // If action met constraints but we are not done applying them all, try a follow-on action
+            if (seq < actionCount - 1) {
                 actionInUse[nextActionId] = true;
                 ++seq;
                 continue;
             }
 
             // We have a route that completes all actions and violates no constraints.
-            // share the good news, then back up and try another combination of actions.
-            else {
-                ++successfulRouteCount;
-                if (logger) {
-                    std::cout << "Successful route: ";
-                    for (int32_t i = 0; i <= seq; ++i) {
-                        std::cout << actionSeq[i] << ", ";
-                    }
-                    std::cout << std::endl << std::endl;
-                }
-
-                actionSeq[seq] = 0;
-                --seq;
-                actionInUse[actionSeq[seq]] = false;
+            ++successfulRouteCount;
+            float successScore = ((float) states[seq + 1].quantityUnloaded) / ((float)states[seq + 1].workingTime);
+            if (successScore > score) {
+                score = successScore;
+                m_actionSeq = actionSeq;
+                workingTime = states[seq + 1].workingTime;
             }
 
+            if (logger) {
+                std::cout << "    *** Successful route!!!" 
+                    << " Working time: " << states[seq + 1].workingTime
+                    << " Score: " << successScore << std::endl;
+            }
+
+            // Back up and try another combination of actions
+            actionSeq[seq] = 0;
+            --seq;
             if (seq >= 0) {
+                actionInUse[actionSeq[seq]] = false;
                 ++actionSeq[seq];
             }
         }
 
-        return false;
+        if (logger) {
+            std::cout << "#########################" << std::endl;
+            if (score > 0.0) {
+                std::cout << "Fastest route selected out of " << successfulRouteCount
+                    << " successful routes and " << m_failedRouteCount 
+                    << " failed routes considered." << std::endl << std::endl;
+                print(std::cout);
+            }
+            else
+                std::cout << "No successful route found after " 
+                << m_failedRouteCount << " routes considered." << std::endl;
+        }
+
+        return (score > 0.0);
     }
 }
