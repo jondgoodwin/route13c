@@ -49,17 +49,20 @@ namespace Route13Plan
 
         int32_t getCount() { return m_count; }
 
-        // Calculate the transit time between two locations
-        virtual SimTime transitTimeEstimator(LocationId origin, LocationId destination) = 0;
-
         // Return the next location along the path from the specified origin to the destination.
         virtual LocationId routeNextStep(LocationId origin, LocationId destination) = 0;
 
+        // Calculate the transit time between two locations
+        // We want time in case congestion affects the estimate
+        virtual SimTime transitTimeEstimator(LocationId origin, LocationId destination, SimTime time) = 0;
+
         // The loadTimeEstimator models the time to load items onto a cart.
-        virtual SimTime loadTimeEstimator(uint32_t quantity) = 0;
+        // We want time in case congestion affects the estimate
+        virtual SimTime loadTimeEstimator(uint32_t quantity, SimTime time) = 0;
 
         // The unloadTimeEstimator models the time to unload items from a cart.
-        virtual SimTime unloadTimeEstimator(int32_t quantity) = 0;
+        // We want time in case congestion affects the estimate
+        virtual SimTime unloadTimeEstimator(int32_t quantity, SimTime time) = 0;
 
     private:
         int32_t m_count;

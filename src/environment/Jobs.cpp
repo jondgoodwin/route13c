@@ -68,9 +68,9 @@ namespace Route13Plan
 
             // End time is based on minimum job duration plus random slack.
             auto minDuration =
-                locations->transitTimeEstimator(startLoc, endLoc) +
-                locations->loadTimeEstimator(quantity) +
-                locations->unloadTimeEstimator(quantity);
+                locations->transitTimeEstimator(startLoc, endLoc, 0) +
+                locations->loadTimeEstimator(quantity, 0) +
+                locations->unloadTimeEstimator(quantity, 0);
             auto endTime = startTime + minDuration * (1 + rand() % slack);
 
             auto job = new TransferJob(quantity, startLoc, startTime, endLoc, endTime);

@@ -39,17 +39,6 @@ namespace Route13Plan
     {
     };
 
-    // The transitTimeEstimator models a sequence of locations along a line.
-    // The travel time between two locations is exactly the same: m_distance.
-    //
-    // So, for example, a freight terminal might have a row of loading docks with
-    // LocationId values in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]. The time to travel
-    // between dock 0 and dock 10 is 10*m_distance time units.
-    SimTime LinearLocations::transitTimeEstimator(LocationId origin, LocationId destination)
-    {
-        return abs(destination - origin) * m_distance;
-    }
-
     // Return the next location along the path from the specified origin to the destination.
     //
     // In the loading dock example, the path from dock 7 to dock 3 first goes
@@ -67,15 +56,29 @@ namespace Route13Plan
         }
     }
 
-    // The loadTimeEstimator models the time to load items onto a cart.
-    SimTime LinearLocations::loadTimeEstimator(uint32_t quantity)
+    // The transitTimeEstimator models a sequence of locations along a line.
+    // The travel time between two locations is exactly the same: m_distance.
+    //
+    // So, for example, a freight terminal might have a row of loading docks with
+    // LocationId values in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]. The time to travel
+    // between dock 0 and dock 10 is 10*m_distance time units.
+    SimTime LinearLocations::transitTimeEstimator(LocationId origin, LocationId destination, SimTime time)
     {
+        (void)time;
+        return abs(destination - origin) * m_distance;
+    }
+
+    // The loadTimeEstimator models the time to load items onto a cart.
+    SimTime LinearLocations::loadTimeEstimator(uint32_t quantity, SimTime time)
+    {
+        (void)time;
         return m_loadSpeed * quantity;
     }
 
     // The unloadTimeEstimator models the time to unload items from a cart.
-    SimTime LinearLocations::unloadTimeEstimator(int32_t quantity)
+    SimTime LinearLocations::unloadTimeEstimator(int32_t quantity, SimTime time)
     {
+        (void)time;
         return m_unloadSpeed * quantity;
     }
 }

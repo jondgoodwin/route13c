@@ -61,7 +61,7 @@ namespace Route13Plan
         SimTime transitTime = 0;
         if (location != oldState->location)
         {
-            transitTime = locations->transitTimeEstimator(oldState->location, location);
+            transitTime = locations->transitTimeEstimator(oldState->location, location, oldState->time);
             if (logger)
             {
                 std::cout << "    " << oldState->time << ": drive for "
@@ -83,7 +83,7 @@ namespace Route13Plan
         }
 
         // Load the packages
-        SimTime loadTime = locations->loadTimeEstimator(quantity);
+        SimTime loadTime = locations->loadTimeEstimator(quantity, newState->time);
         if (logger)
         {
             std::cout << "    " << newState->time << ": load " << quantity
@@ -134,7 +134,7 @@ namespace Route13Plan
         SimTime transitTime = 0;
         if (location != oldState->location)
         {
-            transitTime = locations->transitTimeEstimator(oldState->location, location);
+            transitTime = locations->transitTimeEstimator(oldState->location, location, oldState->time);
             if (logger)
             {
                 std::cout << "    " << oldState->time << ": drive for "
@@ -145,7 +145,7 @@ namespace Route13Plan
         newState->time = oldState->time + transitTime;
 
         // Unload the packages
-        SimTime loadTime = locations->unloadTimeEstimator(quantity);
+        SimTime loadTime = locations->unloadTimeEstimator(quantity, newState->time);
         if (logger)
         {
             std::cout << "    " << newState->time << ": unload " << quantity
@@ -207,7 +207,7 @@ namespace Route13Plan
         SimTime transitTime = 0;
         if (location != oldState->location)
         {
-            transitTime = locations->transitTimeEstimator(oldState->location, location);
+            transitTime = locations->transitTimeEstimator(oldState->location, location, oldState->time);
             if (logger)
             {
                 std::cout << "    " << oldState->time << ": drive for "

@@ -49,13 +49,16 @@ namespace Route13Plan
         LocationId routeNextStep(LocationId origin, LocationId destination);
 
         // Calculate the transit time between two locations
-        SimTime transitTimeEstimator(LocationId origin, LocationId destination);
+        // We want time in case congestion affects the estimate
+        SimTime transitTimeEstimator(LocationId origin, LocationId destination, SimTime time);
 
         // The loadTimeEstimator models the time to load items onto a cart.
-        SimTime loadTimeEstimator(uint32_t quantity);
+        // We want time in case congestion affects the estimate
+        SimTime loadTimeEstimator(uint32_t quantity, SimTime time);
 
         // The unloadTimeEstimator models the time to unload items from a cart.
-        SimTime unloadTimeEstimator(int32_t quantity);
+        // We want time in case congestion affects the estimate
+        SimTime unloadTimeEstimator(int32_t quantity, SimTime time);
 
     private:
         SimTime m_distance;
