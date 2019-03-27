@@ -27,21 +27,91 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "Route.h"
+#include "RouteState.h"
 
 namespace Route13Plan
 {
 
-    Route::Route(Cart* cartp, Actions* acts, SimTime time, int32_t scorenbr) :
+    Route::Route(Cart* cartp, Jobs* jobs) :
         cart(cartp),
-        actions(acts),
-        workingTime(time),
-        score(scorenbr)
+        workingTime(0),
+        score(0.0),
+        m_actions(jobs)
     {
     }
 
     void Route::print(std::ostream& out)
     {
         out << "Route for cart " << cart->id << " (working time = " << workingTime << ":" << std::endl;
-        actions->print(out);
+        m_actions.print(out);
+    }
+
+    bool Route::getBestRoute(ILocations* locations, SimTime time, bool logger)
+    {
+        int32_t successfulRouteCount = 0;
+        m_failedRouteCount = 0;
+
+        // Initialize various working collections
+        auto actionCount = m_actions.actions.size();
+        std::vector<int32_t> actionSeq(actionCount, 0);  // LIFO sequence of actions
+        std::vector<bool> actionInUse(actionCount, false);
+        RouteState routeState(cart, time);
+        std::vector<RouteState> states(actionCount + 1, routeState); // LIFO queue of states
+
+        // Test every valid combination of action sequences
+        for (int32_t seq = 0; seq >= 0; )
+        {
+            auto nextActionId = actionSeq[seq];
+
+            // If we have run out of actions at this level, pop
+            if (nextActionId >= actionCount) {
+                actionSeq[seq] = 0;
+                --seq;
+                if (seq >= 0)
+                    actionInUse[actionSeq[seq]] = false;
+            }
+
+            // We won't try an action twice,
+            // nor will we try an action that depends on an action not yet performed
+            else if (actionInUse[nextActionId]
+                || (m_actions.actions[nextActionId]->depends != NO_DEPENDENCY &&
+                    !actionInUse[m_actions.actions[nextActionId]->depends])) {
+            }
+
+            // Apply action on route state, if it violates a constraint this is a failed action sequence
+            else if (!m_actions.actions[nextActionId]->apply(&states[seq + 1], &states[seq], locations, logger)) {
+                ++m_failedRouteCount;
+            }
+
+            // If action met constraints, keep going to try a follow-on action
+            else if (seq < actionCount - 1) {
+                actionInUse[nextActionId] = true;
+                ++seq;
+                continue;
+            }
+
+            // We have a route that completes all actions and violates no constraints.
+            // share the good news, then back up and try another combination of actions.
+            else {
+                ++successfulRouteCount;
+                if (logger) {
+                    std::cout << "Successful route: ";
+                    for (int32_t i = 0; i <= seq; ++i) {
+                        std::cout << actionSeq[i] << ", ";
+                    }
+                    std::cout << std::endl << std::endl;
+                }
+
+                actionSeq[seq] = 0;
+                --seq;
+                actionInUse[actionSeq[seq]] = false;
+            }
+
+            if (seq >= 0) {
+                ++actionSeq[seq];
+            }
+        }
+
+        return false;
     }
 }

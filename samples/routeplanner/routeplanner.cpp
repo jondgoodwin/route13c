@@ -23,10 +23,11 @@
 #include <cstdlib>
 #include <iostream>
 #include <vector>
+
 #include "../../src/environment/LinearLocations.h"
 #include "../../src/environment/Carts.h"
 #include "../../src/environment/Jobs.h"
-#include "../../src/planner/RoutePlanner.h"
+#include "../../src/planner/Route.h"
 
 using namespace Route13Plan;
 
@@ -55,12 +56,11 @@ int main() {
 
     // Plan best route for first cart
     auto cart = carts.carts[0].get();
-    RoutePlanner routeplanner(cart, &jobs, 0);
-    auto route = routeplanner.getBestRoute(&locations, true);
+    Route route(cart, &jobs);
     std::cout << "#########################" << std::endl;
     std::cout << "Route planning complete" << std::endl << std::endl;
-    if (route) {
-        routeplanner.explainRoute();
+    if (route.getBestRoute(&locations, 0, true)) {
+        route.print(std::cout);
     }
     else {
         std::cout << "No route found." << std::endl;

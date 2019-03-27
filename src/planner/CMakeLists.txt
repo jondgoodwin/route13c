@@ -4,7 +4,6 @@ set(CPPFILES
 	Action.cpp
 	Actions.cpp
 	Route.cpp
-    RoutePlanner.cpp
 	RouteState.cpp
 )
 
@@ -12,7 +11,6 @@ set(PRIVATE_HFILES
 	Action.h
 	Actions.h
 	Route.h
-    RoutePlanner.h
 	RouteState.h
 )
 

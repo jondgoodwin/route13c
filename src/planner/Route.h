@@ -36,12 +36,11 @@
 namespace Route13Plan
 {
 
-    // A Route is an ordered sequence of Actions. Typically, the Actions that
-    // make up a Route are the union of the Actions associated with a number of
-    // Jobs.
-    //
-    // A Route represents the interleaving of Actions required to perform a set
-    // of Jobs.
+    // A Route is an ordered sequence of Actions, derived from a set of jobs.
+    // During construction, there is no guarantee that the route won't violate
+    // constraints. Once the best route is calculated, the resulting route represents
+    // the best sequence of actions that doesn't violate any constraints and
+    // which has the best score. If score is 0, we don't have a valid route.
     //
     // Without the concept of a Route, it would not be possible to interleave the
     // Actions of multiple Jobs. This would preclude opportunities like picking
@@ -53,13 +52,39 @@ namespace Route13Plan
     //   Job B: dropoff 7 at location 5.
     class Route {
     public:
-        Route(Cart* cart, Actions* actions, SimTime time, int32_t score = 0);
+        // Initialize information about a route performed
+        // by a specified cart performing all specified jobs.
+        Route(Cart* cart, Jobs* jobs);
+
+        // Output information about the route
         void print(std::ostream&);
         
+        // Find the optimal order of pickups, dropoffs, and suspends given a
+        // cart, a set of actions and starting time. The planning algorithm uses a brute
+        // force enumeration of every possible route.
+        //
+        // The best route must satisfy these constraints:
+        //    1. The first Action associated with each Job must appear before its
+        //       corresponding second Action.
+        //    2. The cart capacity is never exceeded.
+        //    3. Pickups happen after loads become available.
+        //    4. Dropoffs happen before deadlines.
+        //
+        // Returns true if a best acceptable route was found.
+        // The best route has the highest quantity unloaded per working time.
+        // Working time is defined as time that the cart is moving
+        // between locations, waiting to load, loading, and unloading. It does
+        // not include time when the cart is out of service.
+        bool getBestRoute(ILocations* locations, SimTime time, bool logger);
+
         Cart* cart;
         SimTime workingTime;
-        int32_t score;
-        Actions* actions;
+        float score;
+
+    private:
+        Actions m_actions;
+        int32_t m_failedRouteCount;
+
     };
 
 }
