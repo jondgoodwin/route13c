@@ -35,7 +35,6 @@ using namespace Route13Plan;
 #define CART_CAPACITY 10
 #define LOAD_SPEED 5
 #define UNLOAD_SPEED 2
-#define MAX_JOBS 3
 
 int main() {
 
@@ -56,12 +55,12 @@ int main() {
 
     // Plan best route for first cart
     auto cart = carts.carts[0].get();
-    auto planner = new RoutePlanner(&locations, MAX_JOBS, true);
-    auto route = planner->getBestRoute(cart, &jobs, 0);
+    RoutePlanner routeplanner(cart, &jobs, 0);
+    auto route = routeplanner.getBestRoute(&locations, true);
     std::cout << "#########################" << std::endl;
-    std::cout << "Route planning Complete" << std::endl << std::endl;
+    std::cout << "Route planning complete" << std::endl << std::endl;
     if (route) {
-        planner->explainRoute();
+        routeplanner.explainRoute();
     }
     else {
         std::cout << "No route found." << std::endl;

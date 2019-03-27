@@ -34,25 +34,25 @@
 namespace Route13Plan
 {
 
-    RoutePlanner::RoutePlanner(ILocations* locations, int32_t maxJobs, bool logger) :
-        m_locations(locations),
-        m_maxJobs(maxJobs),
-        m_logger(logger),
+    RoutePlanner::RoutePlanner(Cart* cart, Jobs* jobs, SimTime time) :
+        m_cart(cart),
+        m_jobs(jobs),
+        m_time(time),
+        m_actions(jobs),            // Turn jobs into finer-grained actions
         m_failedRouteCount(0)
     {
     }
 
-    Route* RoutePlanner::getBestRoute(Cart* cart, Jobs* jobs, SimTime time)
+    Route* RoutePlanner::getBestRoute(ILocations* locations, bool logger)
     {
         int32_t successfulRouteCount = 0;
         m_failedRouteCount = 0;
 
         // Initialize various working collections
-        auto actions = new Actions(jobs);  // Turn jobs into finer-grained actions
-        auto actionCount = actions->actions.size();
+        auto actionCount = m_actions.actions.size();
         std::vector<int32_t> actionSeq(actionCount, 0);  // LIFO sequence of actions
         std::vector<bool> actionInUse(actionCount, false);
-        RouteState routeState(cart, time);
+        RouteState routeState(m_cart, m_time);
         std::vector<RouteState> states(actionCount + 1, routeState); // LIFO queue of states
 
         // Test every valid combination of action sequences
@@ -71,12 +71,12 @@ namespace Route13Plan
             // We won't try an action twice,
             // nor will we try an action that depends on an action not yet performed
             else if (actionInUse[nextActionId]
-                 || (actions->actions[nextActionId]->depends != NO_DEPENDENCY && 
-                    !actionInUse[actions->actions[nextActionId]->depends])) {
+                 || (m_actions.actions[nextActionId]->depends != NO_DEPENDENCY &&
+                    !actionInUse[m_actions.actions[nextActionId]->depends])) {
             }
 
             // Apply action on route state, if it violates a constraint this is a failed action sequence
-            else if (!actions->actions[nextActionId]->apply(&states[seq + 1], &states[seq], m_locations, m_logger)) {
+            else if (!m_actions.actions[nextActionId]->apply(&states[seq + 1], &states[seq], locations, logger)) {
                 ++m_failedRouteCount;
             }
             
@@ -91,7 +91,7 @@ namespace Route13Plan
             // share the good news, then back up and try another combination of actions.
             else {
                 ++successfulRouteCount;
-                if (m_logger) {
+                if (logger) {
                     std::cout << "Successful route: ";
                     for (int32_t i = 0; i <= seq; ++i) {
                         std::cout << actionSeq[i] << ", ";

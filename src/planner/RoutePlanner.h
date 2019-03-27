@@ -45,7 +45,7 @@ namespace Route13Plan
     class RoutePlanner {
     public:
 
-        RoutePlanner(ILocations* locations, int32_t maxJobs, bool logger);
+        RoutePlanner(Cart* cart, Jobs* jobs, SimTime time);
 
         // Finds the shortest duration Route for a set of jobs, while satisfying
         // the following constraints:
@@ -72,14 +72,16 @@ namespace Route13Plan
         // not include time when the cart is out of service.
         //
         // Returns null if no Route satisfies the constraints.
-        Route* getBestRoute(Cart* cart, Jobs* jobs, SimTime time);
+        Route* getBestRoute(ILocations* locations, bool logger);
 
         void explainRoute();
 
     private:
-        ILocations* m_locations;
-        int32_t m_maxJobs;
-        bool m_logger;
+        Cart* m_cart;
+        Jobs* m_jobs;
+        SimTime m_time;
+
+        Actions m_actions;
         int32_t m_failedRouteCount;
     };
 

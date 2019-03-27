@@ -40,7 +40,7 @@ namespace Route13Plan
     // make up a Route are the union of the Actions associated with a number of
     // Jobs.
     //
-    // A Route represents the interleaving of Actions requires to perform a set
+    // A Route represents the interleaving of Actions required to perform a set
     // of Jobs.
     //
     // Without the concept of a Route, it would not be possible to interleave the
