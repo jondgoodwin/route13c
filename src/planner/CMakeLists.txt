@@ -3,6 +3,7 @@
 set(CPPFILES
 	Action.cpp
 	Actions.cpp
+	Assignments.cpp
 	Route.cpp
 	RouteState.cpp
 )
@@ -10,6 +11,7 @@ set(CPPFILES
 set(PRIVATE_HFILES
 	Action.h
 	Actions.h
+	Assignments.h
 	Route.h
 	RouteState.h
 )

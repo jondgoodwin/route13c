@@ -26,6 +26,7 @@
 #include "../../src/environment/LinearLocations.h"
 #include "../../src/environment/Carts.h"
 #include "../../src/environment/Jobs.h"
+#include "../../src/planner/Assignments.h"
 
 using namespace Route13Plan;
 
@@ -38,6 +39,7 @@ using namespace Route13Plan;
 #define JOB_COUNT 50
 #define MAX_START_TIME 1000
 #define SLACK 100
+#define MAX_LOOKAHEAD 3
 
 int main() {
 
@@ -54,4 +56,6 @@ int main() {
     jobs.createRandom(JOB_COUNT, &locations, CART_CAPACITY, MAX_START_TIME, SLACK);
     jobs.print(std::cout);
 
+    Assignments assignments(&carts, &jobs, MAX_LOOKAHEAD);
+    assignments.planBest(&locations, 0, false);
 }
