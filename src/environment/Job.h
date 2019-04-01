@@ -29,9 +29,10 @@
 #pragma once
 
 #include <cstdint>
+#include <vector>
 
-#include "ILocations.h"
 #include "Cart.h"
+#include "ILocations.h"
 
 namespace Route13Plan
 {
@@ -56,6 +57,9 @@ namespace Route13Plan
         JobType type;
         Cart* assignedTo;
     };
+
+    // A list of jobs
+    typedef std::vector<IJob*> JobList;
 
     enum TransferJobState {
         BEFORE_PICKUP,

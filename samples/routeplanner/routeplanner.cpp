@@ -54,7 +54,11 @@ int main() {
     jobs.addOutOfService(9, 30 * 60, 40 * 60);
     jobs.print(std::cout);
 
-    // Plan best route for first cart
-    Route route(carts.carts[0].get(), &jobs);
+    // Plan best route for first cart across all jobs
+    JobList joblist;
+    for (auto jobi = jobs.jobs.begin(); jobi != jobs.jobs.end(); ++jobi) {
+        joblist.push_back(jobi->get());
+    }
+    Route route(carts.carts[0].get(), &joblist);
     route.getBestRoute(&locations, 0, true);
 }

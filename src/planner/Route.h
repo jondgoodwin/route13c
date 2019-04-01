@@ -54,7 +54,7 @@ namespace Route13Plan
     public:
         // Initialize information about a route performed
         // by a specified cart performing all specified jobs.
-        Route(Cart* cart, Jobs* jobs);
+        Route(Cart* cart, JobList* jobs);
 
         // Output information about the route
         void print(std::ostream&);

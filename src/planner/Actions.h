@@ -41,7 +41,7 @@ namespace Route13Plan
     class Actions {
     public:
         // Create a pair of Actions from every job
-        Actions(Jobs* jobs);
+        Actions(JobList* jobs);
 
         // Output to stream information about the fleet
         void print(std::ostream& out);

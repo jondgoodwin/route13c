@@ -32,7 +32,7 @@
 namespace Route13Plan
 {
 
-    Route::Route(Cart* cartp, Jobs* jobs) :
+    Route::Route(Cart* cartp, JobList* jobs) :
         cart(cartp),
         workingTime(0),
         score(0.0),

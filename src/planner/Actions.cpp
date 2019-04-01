@@ -32,31 +32,30 @@ namespace Route13Plan
 {
 
     // Create fine-grained Actions from every job
-    Actions::Actions(Jobs* jobs)
+    Actions::Actions(JobList* jobs)
     {
-        for (auto jobi = jobs->jobs.begin(); jobi != jobs->jobs.end(); ++jobi)
+        for (auto jobp : *jobs)
         {
-            auto &job = *jobi;
-            switch (job->type) 
+            switch (jobp->type) 
             {
             case JobType::TRANSFER:
             {
-                auto xferJob = static_cast<TransferJob*>(job.get());
+                auto xferJob = static_cast<TransferJob*>(jobp);
                 if (xferJob->state == TransferJobState::BEFORE_PICKUP) {
                     actions.push_back(std::unique_ptr<IAction>(
-                        new PickupAction(job.get(), xferJob->pickupLocation, xferJob->pickupAfter, xferJob->quantity)));
+                        new PickupAction(jobp, xferJob->pickupLocation, xferJob->pickupAfter, xferJob->quantity)));
                     actions.push_back(std::unique_ptr<IAction>(
-                        new DropoffAction(job.get(), xferJob->dropoffLocation, xferJob->dropoffBefore, xferJob->quantity,
+                        new DropoffAction(jobp, xferJob->dropoffLocation, xferJob->dropoffBefore, xferJob->quantity,
                             actions.size()-1)));
                 }
                 break;
             }
             case JobType::OUT_OF_SERVICE:
             {
-                auto oosJob = static_cast<OutOfServiceJob*>(job.get());
+                auto oosJob = static_cast<OutOfServiceJob*>(jobp);
                 if (oosJob->state == OutOfServiceJobState::BEFORE_BREAK) {
                     actions.push_back(std::unique_ptr<IAction>(
-                        new SuspendAction(job.get(), oosJob->suspendLocation, oosJob->suspendTime, oosJob->resumeTime)));
+                        new SuspendAction(jobp, oosJob->suspendLocation, oosJob->suspendTime, oosJob->resumeTime)));
                 }
                 break;
             }
