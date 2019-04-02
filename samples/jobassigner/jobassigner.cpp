@@ -57,5 +57,5 @@ int main() {
     jobs.print(std::cout);
 
     Assignments assignments(&carts, &jobs, MAX_LOOKAHEAD);
-    assignments.planBest(&locations, 0, false);
+    assignments.planBest(&locations, 0, true);
 }

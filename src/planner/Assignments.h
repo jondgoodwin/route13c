@@ -35,6 +35,17 @@
 namespace Route13Plan
 {
 
+    // An assignment describes a specific, scored list of jobs that
+    // a specific cart can successfully perform without violating any constraint
+    class Assignment {
+    public:
+        Assignment(int32_t cartid, JobList *jobs, float score);
+
+        int32_t cartid;
+        JobList joblist;
+        float score;
+    };
+
     // Assignments lists the jobs that have been assigned to every available cart.
     //
     // This is determined by evaluating all combinations of jobs for
@@ -47,10 +58,16 @@ namespace Route13Plan
         // Then greedy selection from enumerated job assignments.
         void planBest(ILocations* locations, SimTime time, bool logger);
 
+        void print(std::ostream& out);
+
+        // List of assignments by cart
+        std::vector<Assignment> assignments;
 
     private:
         Carts* m_carts;
         Jobs* m_jobs;
         int32_t m_maxJobs;
+        ILocations* m_locations;
+        SimTime m_time;
     };
 }
