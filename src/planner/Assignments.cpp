@@ -85,6 +85,7 @@ namespace Route13Plan
 
         // Build a collection of viable job assignments for every cart
         std::vector<Assignment> alternatives;
+        std::vector<int32_t> jobSeq(m_maxJobs, 0);  // LIFO sequence of jobs
         for (auto cartid = 0; cartid < existingAssignments.size(); ++cartid) {
             Cart* cartp = m_carts->carts[cartid].get();
             JobList* joblist = existingAssignments[cartid].get();
@@ -98,7 +99,6 @@ namespace Route13Plan
 
             // Try every possible combination of up to m_maxJobs jobs on this cart
             auto maxJobCount = m_maxJobs - joblist->size();
-            std::vector<int32_t> jobSeq(maxJobCount, 0);  // LIFO sequence of jobs
             for (int32_t seq = 0; seq >= 0; ) {
                 auto nextJobId = jobSeq[seq];
 
