@@ -44,6 +44,7 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 set(ENVIRONMENT_HFILES
   ${CMAKE_SOURCE_DIR}/src/environment/Cart.h
   ${CMAKE_SOURCE_DIR}/src/environment/Carts.h
+  ${CMAKE_SOURCE_DIR}/src/environment/GraphLocations.h
   ${CMAKE_SOURCE_DIR}/src/environment/ILocations.h
   ${CMAKE_SOURCE_DIR}/src/environment/Job.h
   ${CMAKE_SOURCE_DIR}/src/environment/Jobs.h

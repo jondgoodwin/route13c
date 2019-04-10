@@ -22,52 +22,67 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-// ILocations
+// GraphLocations
 //
 ///////////////////////////////////////////////////////////////////////////////
 
 #pragma once
 
-#include <cstdint>
+#include <cstdlib>
+#include <vector>
+
+#include "ILocations.h"
 
 namespace Route13Plan
 {
+    // A valid route between two locations, whose distance
+    // represents the travel time
+    class Edge {
+    public:
+        Edge(LocationId from, LocationId to, SimTime distance);
+        LocationId from;
+        LocationId to;
+        SimTime distance;
+    };
 
-    typedef int32_t LocationId;
-    const int32_t LocationIdNone = -1;
 
-    typedef uint32_t SimTime;
-    const uint32_t SimTimeMax = UINT32_MAX;
-
-    // ILocations models the "field" on which carts travel to get work down.
-    // It is useful for determining best routes.
+    // This models a collection of edges describing travel routes between
+    // all locations.
+    // The distance between two locations is measured in transit time (SimTime).
     //
-    // Importantly, it implements estimators that determine how long it takes
+    // It implements estimators that determine how long it takes
     // for work to get accomplished, including cart transit times and
     // package loading and unloading.
-    class ILocations {
+    class GraphLocations : public ILocations {
     public:
-        ILocations(int32_t count) : m_count(count) {};
+        GraphLocations(int32_t locations, int32_t loadSpeed, int32_t unloadSpeed);
 
-        int32_t getCount() { return m_count; }
+        // Add a transit edge to the graph of locations
+        void addEdge(LocationId from, LocationId to, SimTime distance);
+
+        // Pre-calculate transit information, now that all edges have been defined
+        void commit();
 
         // Return the next location along the path from the specified origin to the destination.
-        virtual LocationId routeNextStep(LocationId origin, LocationId destination) = 0;
+        LocationId routeNextStep(LocationId origin, LocationId destination);
 
         // Calculate the transit time between two locations
         // We want time in case congestion affects the estimate
-        virtual SimTime transitTimeEstimator(LocationId origin, LocationId destination, SimTime time) = 0;
+        SimTime transitTimeEstimator(LocationId origin, LocationId destination, SimTime time);
 
         // The loadTimeEstimator models the time to load items onto a cart.
         // We want time in case congestion affects the estimate
-        virtual SimTime loadTimeEstimator(uint32_t quantity, SimTime time) = 0;
+        SimTime loadTimeEstimator(uint32_t quantity, SimTime time);
 
         // The unloadTimeEstimator models the time to unload items from a cart.
         // We want time in case congestion affects the estimate
-        virtual SimTime unloadTimeEstimator(int32_t quantity, SimTime time) = 0;
+        SimTime unloadTimeEstimator(int32_t quantity, SimTime time);
 
     private:
-        int32_t m_count;
+        int32_t m_loadSpeed;
+        int32_t m_unloadSpeed;
+        std::vector<Edge> m_edges;
+        std::vector<std::vector<SimTime>> m_distance;
+        std::vector<std::vector<LocationId>> m_next;
     };
-
 }
