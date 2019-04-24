@@ -44,21 +44,20 @@ using namespace Route13Plan;
 
 int main() {
 
+    std::ofstream out("jobrandom.txt");
+
     // Define the location graph
     auto locations = LinearLocations(LOCATION_COUNT, LOCATION_DISTANCE, LOAD_SPEED, UNLOAD_SPEED);
+
+    out << LOCATION_COUNT << ", " << LOCATION_COUNT - 1 << ", " << LOAD_SPEED << ", " << UNLOAD_SPEED << std::endl;
+    for (int loc = 0; loc < LOCATION_COUNT - 1; ++loc) {
+        out << loc << ", " << loc + 1 << ", " << LOCATION_DISTANCE << std::endl;
+    }
 
     // Create a fleet of some randomly-located carts
     auto carts = Carts();
     carts.createRandom(CART_COUNT, CART_CAPACITY, locations.getCount());
     carts.print(std::cout);
-
-    // Create a set of random jobs.
-    auto jobs = Jobs();
-    jobs.createRandom(JOB_COUNT, &locations, CART_CAPACITY, MAX_START_TIME, SLACK);
-    jobs.print(std::cout);
-
-    std::ofstream out("jobrandom.txt");
-    out << LOCATION_COUNT << ", " << LOCATION_DISTANCE << ", " << LOAD_SPEED << ", " << UNLOAD_SPEED << std::endl;
 
     out << CART_COUNT << std::endl;
     for (auto carti = carts.carts.begin(); carti != carts.carts.end(); ++carti) {
@@ -66,6 +65,11 @@ int main() {
         out << cartp->id << ", " << cartp->capacity << ", " << cartp->availLocation << ", "
             << cartp->availTime << ", " << cartp->availPayload << std::endl;
     }
+
+    // Create a set of random jobs.
+    auto jobs = Jobs();
+    jobs.createRandom(JOB_COUNT, &locations, CART_CAPACITY, MAX_START_TIME, SLACK);
+    jobs.print(std::cout);
 
     out << JOB_COUNT << std::endl;
     for (auto jobi = jobs.jobs.begin(); jobi != jobs.jobs.end(); ++jobi) {

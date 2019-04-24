@@ -38,7 +38,7 @@ namespace Route13Plan
     // Add a cart to the fleet of carts
     void Carts::addCart(Cart* cart)
     {
-        carts.push_back(std::unique_ptr<Cart>(cart));
+        carts.push_back(std::unique_ptr<Cart>(new Cart(cart->id, cart->capacity, cart->availLocation, cart->availTime, cart->availPayload)));
     }
 
     // Create a random fleet of carts

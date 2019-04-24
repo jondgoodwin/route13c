@@ -29,6 +29,7 @@
 #include <string>
 #include <vector>
 
+#include "../../src/environment/GraphLocations.h"
 #include "../../src/environment/LinearLocations.h"
 #include "../../src/environment/Carts.h"
 #include "../../src/environment/Jobs.h"
@@ -75,12 +76,19 @@ int fileRun(int maxLookAhead) {
     if (!file.is_open())
         return 0;
 
-    // Read and set up locations
+    // Read and set up graph-based locations
     std::string line;
     std::getline(file, line);
-    int locCount, locDist, loadSpeed, unloadSpeed;
-    sscanf(line.c_str(), "%d, %d, %d, %d", &locCount, &locDist, &loadSpeed, &unloadSpeed);
-    auto locations = LinearLocations(locCount, locDist, loadSpeed, unloadSpeed);
+    int locCount, edgeCount, loadSpeed, unloadSpeed;
+    sscanf(line.c_str(), "%d, %d, %d, %d", &locCount, &edgeCount, &loadSpeed, &unloadSpeed);
+    auto locations = GraphLocations(locCount, loadSpeed, unloadSpeed);
+    while (edgeCount--) {
+        std::getline(file, line);
+        int from, to, dist;
+        sscanf(line.c_str(), "%d, %d, %d", &from, &to, &dist);
+        locations.addEdge(from, to, dist);
+    }
+    locations.commit();
 
     // Read and set up carts
     auto carts = Carts();
@@ -94,13 +102,14 @@ int fileRun(int maxLookAhead) {
         Cart cart = Cart(cartId, cartCapacity, cartLoc, cartTime, cartPayload);
         carts.addCart(&cart);
     }
+    carts.print(std::cout);
 
     // Read and set up carts
     auto jobs = Jobs();
     std::getline(file, line);
     int jobCount;
     sscanf(line.c_str(), "%d", &jobCount);
-    while (cartCount--) {
+    while (jobCount--) {
         std::getline(file, line);
         int jobid, jobtype, jobqty, jobPickLoc, jobPickAfter, jobDropLoc, jobDropBefore;
         sscanf(line.c_str(), "%d, %d", &jobid, &jobtype);
@@ -115,6 +124,7 @@ int fileRun(int maxLookAhead) {
             jobs.addOutOfService(suspendLoc, suspendTime, resumeTime);
         }
     }
+    jobs.print(std::cout);
 
     run(&carts, &jobs, &locations, maxLookAhead);
     return 1;
